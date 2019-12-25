@@ -1,5 +1,8 @@
 import UIKit
 
+//https://github.com/KuoChingHao/FacadeDemo
+
+
 struct Hotel {
     //Information about hotel room
 }
@@ -83,5 +86,72 @@ struct TravelSystem2 {
     }
     
 }
+
+
+struct TravelFacade {
+
+    var hotels: [Hotel]?
+    var flights: [Flight]?
+    var cars: [RentalCar]?
+    
+    init(to: NSDate, from: NSDate) {
+        hotels = HotelBooking.getHotelNameForDates(to: to, from: from)
+        flights = FlightBooking.getFlightNameForDates(to: to, from: from)
+        cars = RentalCarBooking.getRentalCarNameForDates(to: to,from: from)
+    }
+    
+    func bookTrip(hotel: Hotel, flight: Flight, rentalCar: RentalCar) {
+        HotelBooking.bookHotel(hotel: hotel)
+        FlightBooking.bookFlight(flight: flight)
+        RentalCarBooking.bookRentalCar(rentalCar: rentalCar)
+    }
+    
+}
+
+
+struct TravelSystem3 {
+    
+    var travelFacade : TravelFacade?
+    
+    mutating func searchTravel(to: NSDate, from: NSDate){
+        travelFacade = TravelFacade(to: to, from: from)
+    }
+    
+    func bookTrip(hotel: Hotel, flight: Flight, rentalCar: RentalCar) {
+        travelFacade?.bookTrip(hotel: hotel, flight: flight, rentalCar: rentalCar)
+    }
+}
+
+
+
+
+struct AppleAPI {
+    
+    var par : String
+    
+    func sentAPI(){
+        
+    }
+    
+}
+
+struct AppleAPIProxy {
+    
+    private let api : AppleAPI = .init(par: "123")
+    
+    var par : String {
+        get {
+            api.par
+        }
+    }
+    
+    func sentAPI(){
+        api.sentAPI()
+    }
+}
+
+let appleAPI = AppleAPIProxy()
+appleAPI.sentAPI()
+print(appleAPI.par)
 
 
